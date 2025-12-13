@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Karambit",
+    range="Animator P",
+    ammo="Automat. Oil +3",
+    head={ name="Taeon Chapeau", augments={'Pet: Accuracy+4 Pet: Rng. Acc.+4','Pet: "Dbl. Atk."+5','Pet: Damage taken -2%',}},
+    body="Pitre Tobe +3",
+    hands={ name="Taeon Gloves", augments={'Pet: Attack+7 Pet: Rng.Atk.+7','Pet: "Dbl. Atk."+5','Pet: Damage taken -2%',}},
+    legs={ name="Taeon Tights", augments={'Pet: Attack+19 Pet: Rng.Atk.+19','Pet: "Dbl. Atk."+4','Pet: Damage taken -4%',}},
+    feet={ name="Taeon Boots", augments={'Pet: Accuracy+5 Pet: Rng. Acc.+5','Pet: "Dbl. Atk."+5','Pet: Damage taken -4%',}},
+    neck="Shulmanu Collar",
+    waist="Klouskap Sash",
+    left_ear="Handler's Earring +1",
+    right_ear="Domes. Earring",
+    left_ring="Thurandaut Ring",
+    right_ring="Varar Ring +1",
+    back={ name="Visucius's Mantle", augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20','Accuracy+20 Attack+20','Pet: Haste+10','Pet: Magic dmg. taken-10%',}},
+}

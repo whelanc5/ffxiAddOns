@@ -1,0 +1,16 @@
+sets.exported={
+    main="Ipetam",
+    sub="Thief's Knife",
+    head="Meghanada Visor +1",
+    body="Malignance Tabard",
+    hands={ name="Plun. Armlets +1", augments={'Enhances "Perfect Dodge" effect',}},
+    legs="Meg. Chausses +2",
+    feet="Skulk. Poulaines",
+    neck="Shifting Neck. +1",
+    waist="Hurch'lan Sash",
+    left_ear="Steelflash Earring",
+    right_ear="Sherida Earring",
+    left_ring="Varar Ring +1",
+    right_ring="Rajas Ring",
+    back="Moonbeam Cape",
+}

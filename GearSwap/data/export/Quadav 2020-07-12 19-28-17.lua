@@ -1,0 +1,16 @@
+sets.exported={
+    main="Tokko Knuckles",
+    range="Animator P",
+    head="Tali'ah Turban +1",
+    body="Hiza. Haramaki +1",
+    hands="Tali'ah Gages +1",
+    legs="Tali'ah Sera. +1",
+    feet="Tali'ah Crackows +1",
+    neck="Ej Necklace",
+    waist="Hurch'lan Sash",
+    left_ear="Bladeborn Earring",
+    right_ear="Steelflash Earring",
+    left_ring="Hizamaru Ring",
+    right_ring="Epona's Ring",
+    back="Aptitude Mantle",
+}

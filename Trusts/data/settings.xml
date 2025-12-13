@@ -1,0 +1,34 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <auto>true</auto>
+        <language>English</language>
+        <sets>
+            <bottin>
+                <1>Joachim</1>
+                <2>Qultada</2>
+                <3>Yoran-Oran (UC)</3>
+                <4>Gessho</4>
+            </bottin>
+            <default>
+                <1>Valaineral</1>
+                <2>Mihli Aliapoh</2>
+                <3>Tenzen</3>
+                <4>Adelheid</4>
+                <5>Joachim</5>
+            </default>
+            <set1>
+                <1>Yoran-Oran (UC)</1>
+                <2>Valaineral</2>
+                <3>Cornelia</3>
+                <4>Qultada</4>
+                <5>Joachim</5>   
+            </set1>
+        </sets>
+        <wait>
+            <aftercast>3</aftercast>
+            <retr>1.25</retr>
+            <retrall>3</retrall>
+        </wait>
+    </global>
+</settings>
