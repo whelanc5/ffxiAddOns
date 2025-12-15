@@ -2,18 +2,6 @@
 include('augments.lua')
 
 
--- request_client_switch.lua (inside your plugin)
--- target_client = 1, 2, 3, etc.
-function request_client_switch(target_client)
-    local switch_file = windower.dir('data') .. 'client_switch.txt'
-    local file = io.open(switch_file, 'w')
-    if file then
-        file:write(target_client)
-        file:close()
-    end
-end
-
-request_client_switch(2)
 
 packets = require('packets')
 function update_pet_tp(id,data) 
@@ -61,11 +49,13 @@ wsId= 0
 function checkStuff()
 local mob =  windower.ffxi.get_mob_by_target("t")
 	if mob ~= nil then
-	 add_to_chat(122, "mob entity" .. mob.entity_type)
 	 add_to_chat(122, "mob type " .. mob.spawn_type)
 	 add_to_chat(122, "mob id " .. mob.id)
 	 add_to_chat(122, "mob index " .. mob.index)
-	  add_to_chat(122, "claim id " .. mob.claim_id)
+	 add_to_chat(122, "claim id " .. mob.claim_id)
+	 if mob.target_index ~= nil then
+	  add_to_chat(122, "mob target index " .. mob.target_index)
+	 end
 	end
 	local leader =  windower.ffxi.get_mob_by_id(windower.ffxi.get_party().party1_leader)
 	if leader ~= nil then
@@ -265,8 +255,8 @@ function runStuff()
 		if buffactive['Phalanx'] == nil then
 			send_command('input /ma Phalanx <me>')
 		end
-		if buffactive['Stoneskin'] == nil then
-			send_command('input /ma Stoneskin <me>')
+		if buffactive['Regen'] == nil then
+			send_command('input /ma "Regen IV" <me>')
 		end
 		if buffactive['Aquaveil'] == nil then
 			send_command('input /ma Aquaveil <me>')
@@ -297,9 +287,25 @@ maxDistance = 50
     badMobs = S{"Soul Pyre", "Logging Point", "Snipper", "Lobo", "Emblazoned Reliquary", "Ethereal Ingress #5", "Lentic Toad",  "Erupting Geyser", "Staumarth"}
 
 function isValidMob(currMob)
-
-return  currMob~= nil and currMob.hpp > 0 and badMobs[currMob.name] == nil and (  currMob.claim_id == 0 or windower.ffxi.get_mob_by_id(currMob.claim_id).in_party) and currMob.spawn_type == 16
-
+    if currMob == nil or currMob.hpp <= 0 or badMobs[currMob.name] ~= nil or currMob.spawn_type ~= 16 then
+        return false
+    end
+    
+    -- Target filter: if enabled, only target mobs from approved list
+    if targetFilter and not approvedTargets:contains(currMob.name) then
+        return false
+    end
+    
+    -- Check if mob is unclaimed or claimed by someone in our party
+    local validClaim = (currMob.claim_id == 0 or windower.ffxi.get_mob_by_id(currMob.claim_id).in_party)
+    
+    -- Priority 1: If we're in combat and mob is close, prioritize it (but still respect claims)
+    if player.in_combat and currMob.distance < 25 and validClaim then
+        return true
+    end
+    
+    -- Priority 2: Original logic for all other cases
+    return validClaim
 end
 
 function onCooldown(spell)
@@ -346,9 +352,8 @@ function engageMob(mob)
             packets.inject(engage)		
           	--add_to_chat(122, "engaging")
 		end
-	moveToMob(mob)
-
 end	
+
 function targetMob(mob)
 --add_to_chat(122, mob.name)
 	--add_to_chat(122, player.status)
@@ -411,11 +416,34 @@ function bot()
 	windower.ffxi.run(false)	
 	if bottin ~= true then
 		return
+	end
+	
+	-- Stop movement if casting to prevent spell interruption
+	if player.status == "Casting" then
+		windower.ffxi.run(false)
+		return
 	end	
 	
 		local mob =  windower.ffxi.get_mob_by_target("t")
 	
-	if isValidMob(mob) == false or  player.target.type ~= "MONSTER"    then 
+	-- Check for closer threatening mobs even when we have a valid target
+	local shouldSwitchTarget = false
+	if player.status == "Engaged" and mob ~= nil and isValidMob(mob) then
+		local currentDistance = mob.distance
+		-- Look for closer mobs that might be hitting us
+		for i = 0, mobNum do
+			local nearbyMob = windower.ffxi.get_mob_by_index(i)
+			if nearbyMob ~= nil and isValidMob(nearbyMob) and nearbyMob.id ~= mob.id then
+				-- If there's a much closer mob (at least 10 units closer), switch to it
+				if nearbyMob.distance < (currentDistance - 100) and nearbyMob.distance < 25 then
+					shouldSwitchTarget = true
+					break
+				end
+			end
+		end
+	end
+
+	if isValidMob(mob) == false or player.target.type ~= "MONSTER" or shouldSwitchTarget then 
 		if player.status=="Engaged"  then
 			disengage()
 			windower.ffxi.run(false)
@@ -423,15 +451,31 @@ function bot()
 		local i =0
 		local lowestDistance = 999
 		lowestIndex = -1
+		local combatDistance = 999
+		local combatIndex = -1
+		
 		--while mob == nil or math.sqrt(mob.distance) > 50 or mob.hpp <= 0  do
 		while i <= mobNum do
 			currMob = windower.ffxi.get_mob_by_index(i)
 			
-			if currMob ~= nil and currMob.distance < lowestDistance and isValidMob(currMob) then
-				lowestDistance = currMob.distance
-				lowestIndex = i
+			if currMob ~= nil and isValidMob(currMob) then
+				-- Priority 1: If in combat but not engaged, prioritize very close mobs
+				if player.in_combat and player.status ~= "Engaged" and currMob.distance < 25 and currMob.distance < combatDistance then
+					combatDistance = currMob.distance
+					combatIndex = i
+				end
+				-- Priority 2: Normal closest mob logic
+				if currMob.distance < lowestDistance then
+					lowestDistance = currMob.distance
+					lowestIndex = i
+				end
 			end
 				i = i +1		
+		end
+		
+		-- Use combat priority mob if we found one, otherwise use closest
+		if combatIndex ~= -1 then
+			lowestIndex = combatIndex
 		end	
 		
 		passes = 0		
@@ -744,7 +788,7 @@ end
 ----------------------------------------------------------------------------------------------Booleans----------------------------------------------------------------------------------------------------------------------------------------------
 	--These are booleans 
 	
-	booleans = S{"magicburst", "deploy","rest", "automaneuver", "rune",  "autoHaste" ,"autoRoll","autoMagic", "provoke",  "swaps", "fire", "thunder", "water", "light", "dark", "wind", "earth", "activate", "mnkRecast", "warRecast", "samRecast", "runRecast", "autoRunes", "runSpells", "automaneuver2", "autoRA", "bottin", "assist", "autoItem", "trusts", "wyvern", "autoClaim"} --booleans
+	booleans = S{"magicburst", "deploy","rest", "automaneuver", "rune",  "autoHaste" ,"autoRoll","autoMagic", "provoke",  "swaps", "fire", "thunder", "water", "light", "dark", "wind", "earth", "activate", "mnkRecast", "warRecast", "samRecast", "runRecast", "autoRunes", "runSpells", "automaneuver2", "autoRA", "bottin", "assist", "autoItem", "trusts", "wyvern", "autoClaim", "targetFilter"} --booleans
 	
 	auto = true -- main auto loop bool
 	if auto then
@@ -757,6 +801,10 @@ end
 	trusts = false
 	autoMagic = false
 	rest = true
+	targetFilter = false
+	
+	-- Approved target list - only these mobs can be targeted when filter is on
+	approvedTargets = S{"Apex Eft", "Apex Crab", "Apex Bat", "Apex Tiger", "Apex Toad", "Apex Pugil"}
 	cap = false
 	autoClaim = true
 	

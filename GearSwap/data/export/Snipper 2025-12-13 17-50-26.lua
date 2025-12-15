@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Zantetsuken X",
+    sub="Tzacab Grip",
+    ammo="Honed Tathlum",
+    head="Aya. Zucchetto +2",
+    body="Ayanmo Corazza +2",
+    hands="Meg. Gloves +2",
+    legs="Aya. Cosciales +2",
+    feet={ name="Herculean Boots", augments={'Accuracy+30','"Triple Atk."+3','INT+3','Attack+13',}},
+    neck="Loricate Torque",
+    waist="Flume Belt",
+    left_ear="Brutal Earring",
+    right_ear="Sherida Earring",
+    left_ring={ name="Dark Ring", augments={'Enemy crit. hit rate -2','Magic dmg. taken -3%','Phys. dmg. taken -5%',}},
+    right_ring="Defending Ring",
+    back={ name="Ogma's Cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Enmity+10','Damage taken-3%',}},
+}
