@@ -4,6 +4,10 @@ include('augments.lua')
 
 
 packets = require('packets')
+
+-- Track post-death timing
+local lastDeathTime = 0
+
 function update_pet_tp(id,data) 
 	
 	  -- player_tp = packets.parse('incoming', data)["TP"]
@@ -47,7 +51,22 @@ wsId= 0
 --wsId= 0;
 
 function checkStuff()
-local mob =  windower.ffxi.get_mob_by_target("t")
+	-- Player status info
+	add_to_chat(122, "=== PLAYER STATUS ===")
+	add_to_chat(122, "Status: " .. tostring(player.status))
+	add_to_chat(122, "In Combat: " .. tostring(player.in_combat))
+	add_to_chat(122, "Casting: " .. tostring(windower.ffxi.get_player().casting))
+	add_to_chat(122, "HP: " .. player.hp .. "/" .. player.max_hp .. " (" .. player.hpp .. "%)")
+	add_to_chat(122, "MP: " .. player.mp .. "/" .. player.max_mp .. " (" .. player.mpp .. "%)")
+	if player.target then
+		add_to_chat(122, "Target: " .. tostring(player.target.name) .. " (" .. tostring(player.target.type) .. ")")
+	else
+		add_to_chat(122, "Target: None")
+	end
+	
+	-- Mob info
+	add_to_chat(122, "=== MOB INFO ===")
+	local mob =  windower.ffxi.get_mob_by_target("t")
 	if mob ~= nil then
 	 add_to_chat(122, "mob type " .. mob.spawn_type)
 	 add_to_chat(122, "mob id " .. mob.id)
@@ -57,6 +76,9 @@ local mob =  windower.ffxi.get_mob_by_target("t")
 	  add_to_chat(122, "mob target index " .. mob.target_index)
 	 end
 	end
+	
+	-- Leader info
+	add_to_chat(122, "=== LEADER INFO ===")
 	local leader =  windower.ffxi.get_mob_by_id(windower.ffxi.get_party().party1_leader)
 	if leader ~= nil then
 	 add_to_chat(122, "leader " .. leader.id )
@@ -249,17 +271,14 @@ function runStuff()
 		end
 	end
 	if runSpells and not windower.ffxi.get_player().moving then
-		if buffactive['Temper'] == nil then
+		if buffactive['Multi Strikes'] == nil then
 			send_command('input /ma Temper <me>')
-		end
-		if buffactive['Phalanx'] == nil then
-			send_command('input /ma Phalanx <me>')
 		end
 		if buffactive['Regen'] == nil then
 			send_command('input /ma "Regen IV" <me>')
 		end
-		if buffactive['Aquaveil'] == nil then
-			send_command('input /ma Aquaveil <me>')
+		if buffactive['Refresh'] == nil then
+			send_command('input /ma Refresh <me>')
 		end
 	end
 end
@@ -286,6 +305,63 @@ maxDistance = 50
 
     badMobs = S{"Soul Pyre", "Logging Point", "Snipper", "Lobo", "Emblazoned Reliquary", "Ethereal Ingress #5", "Lentic Toad",  "Erupting Geyser", "Staumarth"}
 
+-- Smart combat detection function
+function isActuallyInCombat()
+    -- If not flagged as in combat, definitely not in combat
+    if not player.in_combat then
+        return false
+    end
+    
+    -- Check if we're in the 2-second post-death waiting period
+    if os.time() - lastDeathTime < 2 then
+        return false  -- Still waiting after a death
+    end
+    
+    -- If in combat, check if we have a valid living target
+    local mob = windower.ffxi.get_mob_by_target("t")
+    if mob and isValidMob(mob) and mob.hpp and mob.hpp > 0 then
+        return true  -- We have a valid, living target
+    end
+    
+    -- In combat flag is set, but no valid target = combat just ended
+    if player.in_combat then
+        lastDeathTime = os.time()  -- Record when combat ended
+    end
+    
+    return false
+end
+
+function checkTrustMP()
+	local party = windower.ffxi.get_party()
+	local trustCount = 0
+	
+	-- Check party members p1-p5 (trusts are usually p1-p5)
+	for i = 1, 5 do
+		local member = party['p' .. i]
+		
+		if member and member.name and member.name ~= player.name then
+			-- This is a trust/party member
+			trustCount = trustCount + 1
+			
+			-- Try to get MP from party data
+			if member.mp and member.mpp then
+				if member.mpp < 75 then
+					add_to_chat(122, member.name .. " has low MP (" .. member.mpp .. "%) - party not ready")
+					return false
+				end
+			end
+		end
+	end
+	
+	-- Check if party is full (should have 5 trusts)
+	if trustCount < 5 then
+		add_to_chat(122, "Party not full - only " .. trustCount .. " trusts")
+		return false
+	end
+	
+	return true
+end
+
 function isValidMob(currMob)
     if currMob == nil or currMob.hpp <= 0 or badMobs[currMob.name] ~= nil or currMob.spawn_type ~= 16 then
         return false
@@ -297,7 +373,15 @@ function isValidMob(currMob)
     end
     
     -- Check if mob is unclaimed or claimed by someone in our party
-    local validClaim = (currMob.claim_id == 0 or windower.ffxi.get_mob_by_id(currMob.claim_id).in_party)
+    local validClaim = false
+    if currMob.claim_id == 0 then
+        validClaim = true  -- Unclaimed mob
+    else
+        local claimer = windower.ffxi.get_mob_by_id(currMob.claim_id)
+        if claimer and claimer.in_party then
+            validClaim = true  -- Claimed by party member
+        end
+    end
     
     -- Priority 1: If we're in combat and mob is close, prioritize it (but still respect claims)
     if player.in_combat and currMob.distance < 25 and validClaim then
@@ -418,11 +502,17 @@ function bot()
 		return
 	end
 	
-	-- Stop movement if casting to prevent spell interruption
-	if player.status == "Casting" then
-		windower.ffxi.run(false)
-		return
-	end	
+
+	
+	-- Check if trusts have enough MP and party is full before engaging (only when not actually in combat)
+	if not isActuallyInCombat() then
+		if not checkTrustMP() then
+			if debugBot then add_to_chat(122, "PARTY CHECK FAILED - STOPPING BOT") end
+			return
+		end
+	else
+		if debugBot then add_to_chat(122, "IN ACTUAL COMBAT - SKIPPING PARTY CHECK") end
+	end
 	
 		local mob =  windower.ffxi.get_mob_by_target("t")
 	
@@ -788,7 +878,7 @@ end
 ----------------------------------------------------------------------------------------------Booleans----------------------------------------------------------------------------------------------------------------------------------------------
 	--These are booleans 
 	
-	booleans = S{"magicburst", "deploy","rest", "automaneuver", "rune",  "autoHaste" ,"autoRoll","autoMagic", "provoke",  "swaps", "fire", "thunder", "water", "light", "dark", "wind", "earth", "activate", "mnkRecast", "warRecast", "samRecast", "runRecast", "autoRunes", "runSpells", "automaneuver2", "autoRA", "bottin", "assist", "autoItem", "trusts", "wyvern", "autoClaim", "targetFilter"} --booleans
+	booleans = S{"magicburst", "deploy","rest", "automaneuver", "rune",  "autoHaste" ,"autoRoll","autoMagic", "provoke",  "swaps", "fire", "thunder", "water", "light", "dark", "wind", "earth", "activate", "mnkRecast", "warRecast", "samRecast", "runRecast", "autoRunes", "runSpells", "automaneuver2", "autoRA", "bottin", "assist", "autoItem", "trusts", "wyvern", "autoClaim", "targetFilter", "debugBot"} --booleans
 	
 	auto = true -- main auto loop bool
 	if auto then
@@ -801,12 +891,13 @@ end
 	trusts = false
 	autoMagic = false
 	rest = true
-	targetFilter = false
+	targetFilter = true
+	debugBot = false
 	
 	-- Approved target list - only these mobs can be targeted when filter is on
 	approvedTargets = S{"Apex Eft", "Apex Crab", "Apex Bat", "Apex Tiger", "Apex Toad", "Apex Pugil"}
 	cap = false
-	autoClaim = true
+	autoClaim = false
 	
 	--job auto casts part of main auto loop
 	automaneuver2 = false
@@ -1216,6 +1307,17 @@ function self_command(command)
 	
 	elseif command == "check" then 
 		checkStuff()
+		
+	elseif command == "checkTrust" then
+		local oldDebug = debugBot
+		debugBot = true  -- Force debug on for manual check
+		local result = checkTrustMP()
+		debugBot = oldDebug  -- Restore original setting
+		if result then
+			add_to_chat(122, "Trust check PASSED - party is ready")
+		else
+			add_to_chat(122, "Trust check FAILED - party not ready")
+		end
 		
 	elseif command == "mob" then
 		mobs = windower.ffxi.get_mob_array()
