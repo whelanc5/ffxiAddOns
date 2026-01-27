@@ -36,13 +36,23 @@ function get_sets()
 	sets.Nuke = {}
 
 
-	sets.base = {head="Herculean Helm",neck="Anu Torque",
-         ear1="Schere Earring",ear2="Sherida Earring",body="Malignance Tabard",hands="Herculean Gloves",
-        ring1="Niqmaddu Ring",ring2="Epona's Ring", back="Segomo's Mantle",waist="Moonbow Belt",legs= hercLegsTA,
-        feet= hercFeetTA}
+	sets.base = {
+		head="Mpaca's Cap",
+		body="Mpaca's Doublet",
+		hands=hercGlovesTA,
+		legs="Mpaca's Hose",
+		feet=hercFeetTA,
+		neck="Anu Torque",
+		waist="Moonbow Belt +1",
+		left_ear="Schere Earring",
+		right_ear="Sherida Earring",
+		left_ring="Niqmaddu Ring",
+		right_ring="Epona's Ring",
+		back=SegomoTP
+	}
 	--------------------------------------------------WS-----------------------------------------------------------------------
 	--sets.base.WS = set_combine(sets.base,{ head="Hizamaru Somen +1", hands="Ryuo Tekko",  legs="Hiza. Hizayoroi +1", body = "Hizamaru Haramaki"})	
-	sets.WS = set_combine(sets.base,{ head="Hizamaru Somen +2", hands="Ryuo Tekko",  legs="Hiza. Hizayoroi +2", body ="Hiza. Haramaki +2", ring1 =	"Niqmaddu Ring", ear1 ="Moonshade Earring", ear2="Sherida Earring", feet="Hiza. Sune-Ate +1"})
+	sets.WS = set_combine(sets.base,{hands="Ryuo Tekko", ring1 =	"Niqmaddu Ring", ear1 ="Moonshade Earring", ear2="Sherida Earring"})
 	sets.WS.Default = set_combine(sets.WS,{})
 	sets.WS.Acc = set_combine(sets.WS,{ })	
     sets.precast.WS = sets.WS -- don't change
@@ -61,10 +71,20 @@ function get_sets()
 	sets.WS['Howling Fist'].Acc = sets.WS['Howling Fist']
 
 		------------------------------------------DT-----------------------------------------------------------------------------------------------
-	sets.DT = set_combine(sets.base, { neck="Loricate Torque",  ring2="Defending Ring", waist = "Moonbow Belt", body="Malignance Tabard", feet="Malignance Boots", hands="Malignance Gloves"})
+	sets.DT = set_combine(sets.base, {
+		hands="Mpaca's Gloves",
+		feet="Mpaca's Boots",
+		neck="Loricate Torque",
+		right_ring="Defending Ring"
+	})
     sets.DT.Default = sets.DT
-	sets.DT.Magic  = set_combine(sets.DT,{neck="Twilight Torque", ring1="Dark Ring", ring2="Defending Ring"})
-	sets.DT.Full = set_combine(sets.DT,{  back="Moonbeam Cape",neck="Twilight Torque", ring1="Dark Ring", ring2="Defending Ring", waist = "Moonbow Belt"})
+	sets.DT.Magic  = set_combine(sets.DT,{neck="Twilight Torque", left_ring="Dark Ring"})
+	sets.DT.Full = set_combine(sets.DT,{
+		body="Malignance Tabard",
+		hands="Malignance Gloves",
+		feet="Malignance Boots",
+		back="Moonbeam Cape"
+	})
 	sets.DT.Custom = sets.DT
 	-----------------------------------------------Tp---------------------------------------------------------------------------------------
     sets.TP = set_combine(sets.base,{})	 
@@ -81,7 +101,7 @@ function get_sets()
 	--------------------------------------------------------------------JA------------------------------------------------------------------
    	
 	----------------------------------------------------Idle------------------------------------------------------------------
-	sets.Idle = set_combine(sets.DT,{feet="Hermes' Sandals", body ="Hiza. Haramaki +2"})
+	sets.Idle = set_combine(sets.DT,{feet="Hermes' Sandals"})
 	sets.Idle.Current = sets.Idle
 	sets.Idle.DT = set_combine(sets.DT,{})
 	sets.Idle.Default = sets.Idle 

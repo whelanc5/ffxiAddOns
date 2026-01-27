@@ -1,0 +1,16 @@
+sets.exported = {
+    main="Karambit",
+    ammo="Honed Tathlum",
+    head="Mpaca's Cap",
+    body="Malignance Tabard",
+    hands="Malignance Gloves",
+    legs="Mpaca's Hose",
+    feet="Malignance Boots",
+    neck="Loricate Torque",
+    waist="Moonbow Belt +1",
+    left_ear="Schere Earring",
+    right_ear="Sherida Earring",
+    left_ring="Niqmaddu Ring",
+    right_ring="Defending Ring",
+    back="Moonbeam Cape",
+}

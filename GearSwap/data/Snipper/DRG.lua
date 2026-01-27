@@ -56,7 +56,20 @@ function get_sets()
 	-----------------------------------------------Tp---------------------------------------------------------------------------------------
     sets.TP = set_combine(sets.base,{})	 
 	sets.TP.Current = sets.TP
-	sets.TP.Default = set_combine(sets.TP,{})
+	sets.TP.Default = set_combine(sets.TP,{
+		head="Hjarrandi Helm",
+		body="Hjarrandi Breast.",
+		hands="Sulev. Gauntlets +1",
+		legs="Flamma Dirs +1",
+		feet="Flam. Gambieras +1",
+		neck="Lissome Necklace",
+		waist="Ioskeha Belt",
+		left_ear="Brutal Earring",
+		right_ear="Sherida Earring",
+		left_ring="Niqmaddu Ring",
+		right_ring="Thurandaut Ring",
+		back="Aptitude Mantle"
+	})
     sets.TP.Acc = set_combine(sets.TP,{ })	
 	sets.TP.Haste = set_combine(sets.TP,{})	
     sets.TP.DT=  sets.DT 

@@ -1,0 +1,16 @@
+sets.exported = {
+    main="Karambit",
+    ammo="Honed Tathlum",
+    head="Mpaca's Cap",
+    body="Mpaca's Doublet",
+    hands={ name="Herculean Gloves", augments={'Accuracy+16','"Triple Atk."+3','DEX+1',}},
+    legs="Mpaca's Hose",
+    feet={ name="Herculean Boots", augments={'Accuracy+30','"Triple Atk."+3','INT+3','Attack+13',}},
+    neck="Anu Torque",
+    waist="Moonbow Belt +1",
+    left_ear="Schere Earring",
+    right_ear="Sherida Earring",
+    left_ring="Niqmaddu Ring",
+    right_ring="Dim. Ring (Dem)",
+    back={ name="Segomo's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','"Dbl.Atk."+4',}},
+}

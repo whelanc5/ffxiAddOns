@@ -9,28 +9,19 @@ packets = require('packets')
 local lastDeathTime = 0
 
 function update_pet_tp(id,data) 
-	
-	  -- player_tp = packets.parse('incoming', data)["TP"]
-	 --if player_tp ~= nil then
-		
-	--	if autoWS and player_tp > 999 then
-	--	windower.send_command('lua c gearswap c autoWeaponSkill ')
-	--	end+
-	
-	-- end
-    if pet.status== "Engaged" and  (id == 0x068 or id == 0x067) then
-	 pet_tp = packets.parse('incoming', data)["Pet TP"]
-		if pet_tp ~= nil and pet_tp > 999  then	
-		
-			if sets.Pet.WS[pet.frame]  ~= nil then					
-				windower.send_command('lua c gearswap equip sets.Pet.WS[\'' .. pet.frame.. '\']')
-			elseif sets.Pet.WS  ~= nil then
-				windower.send_command('lua c gearswap equip sets.Pet.WS')		
-			end
-			
+	pet_tp = packets.parse('incoming', data)["Pet TP"]
+	if pet_tp ~= nil and pet_tp > 999  then	
+
+		if sets.Pet.WS[pet.frame] ~= nil then
+			--add_to_chat(122, "Equipping frame-specific WS set for " .. pet.frame)
+			send_command('gs equip sets.Pet.WS[' .. pet.frame.. ']')
+		elseif sets.Pet and sets.Pet.WS then
+			--add_to_chat(122, "Equipping default Pet WS set")
+			send_command('gs equip sets.Pet.WS')
+		else
+			add_to_chat(122, "No Pet WS set found!")
 		end
 	end
-	
 end
 currWS = "Victory Smite"
 currTP =999
@@ -91,58 +82,61 @@ autoStuff = function ()
 	if auto then
 		--add_to_chat(122, "autoStuff" )
 		
-		if trusts and player.status =='Idle' and player.target.type ~= "MONSTER" and windower.ffxi.get_party().p5 == nil then
-			windower.ffxi.run(false)
-			send_command('wait 1 ;input //tru ' .. trustSet)
-			coroutine.schedule(autoStuff, 12)
-			return
-		end
-		if bottin then
-			bot()
-		end
-		if assist then
-			assistBot()
-		end
-		if player.main_job == "PUP" then 
-			pupStuff()
-		end
-		if player.sub_job == "COR" or player.main_job == "COR" then 
-			corStuff()
-		end
-		if player.main_job == "MNK" then
-			mnkStuff()
-		end
-		if player.sub_job == "WAR" or player.main_job == "WAR" then 
-			warStuff()
-		end
-		if player.sub_job == "SAM" or player.main_job == "SAM" then 
-			samStuff()
-		end
-		if  player.main_job == "DRG" then 
-			drgStuff()
-		end
-		if player.main_job == "RUN" then 
-			runStuff()
-		end
-		if autoRA then
-			autoRange()
-		end
-		if autoItem then
-			autoItemUse()
-		end
-		if autoMagic then
-			if autoMagicCast == nil
-				then include('autoMagic.lua')
+		-- Don't auto cast anything if invisible is up
+		if not buffactive['Invisible'] then
+			if trusts and player.status =='Idle' and player.target.type ~= "MONSTER" and windower.ffxi.get_party().p5 == nil then
+				windower.ffxi.run(false)
+				send_command('wait 1 ;input //tru ' .. trustSet)
+				coroutine.schedule(autoStuff, 12)
+				return
 			end
-			autoMagicCast()
-			
+			if bottin then
+				bot()
+			end
+			if assist then
+				assistBot()
+			end
+			if player.main_job == "PUP" then 
+				pupStuff()
+			end
+			if player.sub_job == "COR" or player.main_job == "COR" then 
+				corStuff()
+			end
+			if player.main_job == "MNK" then
+				mnkStuff()
+			end
+			if player.sub_job == "WAR" or player.main_job == "WAR" then 
+				warStuff()
+			end
+			if player.sub_job == "SAM" or player.main_job == "SAM" then 
+				samStuff()
+			end
+			if  player.main_job == "DRG" then 
+				drgStuff()
+			end
+			if player.main_job == "RUN" then 
+				runStuff()
+			end
+			if autoRA then
+				autoRange()
+			end
+			if autoItem then
+				autoItemUse()
+			end
+			if autoMagic then
+				if autoMagicCast == nil
+					then include('autoMagic.lua')
+				end
+				autoMagicCast()
+				
+			end
+			if autoWS and player.tp >  currTP and  player.status == "Engaged"  then 
+				send_command('input / '.. currWS ..' <t>')	
+			end	
 		end
-		if autoWS and player.tp >  currTP and  player.status == "Engaged"  then 
-			send_command('input / '.. currWS ..' <t>')	
-		end	
 		
 		--/
-			coroutine.schedule(autoStuff, 2)
+		coroutine.schedule(autoStuff, 2)
 			
 	end
 	
@@ -205,9 +199,15 @@ function pupStuff()
 end
 
 function drgStuff()
-	if  pet.isvalid == false and wyvern then
+	if  pet.isvalid == false and wyvern and player.status =="Engaged" then
 			send_command('input /ja Call Wyvern <me>')
 			
+	end
+	if drgRecast and player.status == "Engaged" then
+		send_command('input /ja "Jump" <t>')
+		send_command('input /ja "High Jump" <t>')
+		send_command('input /ja "Spirit Jump" <t>')
+		send_command('input /ja "Soul Jump" <t>')
 	end
 end
 
@@ -393,14 +393,21 @@ function isValidMob(currMob)
 end
 
 function onCooldown(spell)
-	local recasts = TableConcat(windower.ffxi.get_ability_recasts(), windower.ffxi.get_spell_recasts())
+	local recast_id = spell.recast_id
 	
-	--add_to_chat(122, recasts[spell.id])
-    if recasts[spell.id] and recasts[spell.id] > 0 then
-        return true
-    else
-        return false
-    end
+	if spell.action_type == 'Ability' then
+		local recasts = windower.ffxi.get_ability_recasts()
+		if recasts[recast_id] and recasts[recast_id] > 0 then
+			return true
+		end
+	else
+		local recasts = windower.ffxi.get_spell_recasts()
+		if recasts[recast_id] and recasts[recast_id] > 0 then
+			return true
+		end
+	end
+	
+	return false
 end
 
 function TableConcat(t1,t2)
@@ -588,8 +595,13 @@ function bot()
 		send_command('input /' .. claimJA)
 	end
 	
+	-- Lock on to target if engaged and not already locked
+	if player.status == "Engaged" and not player.target_locked then
+		send_command('input /lockon')
+	end
+	
 	moveToMob(mob)
-	mob = prevMob
+	prevMob = mob
 	
 end
 	--turn auto on and wait a few seconds for it to activate
@@ -878,7 +890,7 @@ end
 ----------------------------------------------------------------------------------------------Booleans----------------------------------------------------------------------------------------------------------------------------------------------
 	--These are booleans 
 	
-	booleans = S{"magicburst", "deploy","rest", "automaneuver", "rune",  "autoHaste" ,"autoRoll","autoMagic", "provoke",  "swaps", "fire", "thunder", "water", "light", "dark", "wind", "earth", "activate", "mnkRecast", "warRecast", "samRecast", "runRecast", "autoRunes", "runSpells", "automaneuver2", "autoRA", "bottin", "assist", "autoItem", "trusts", "wyvern", "autoClaim", "targetFilter", "debugBot"} --booleans
+	booleans = S{"magicburst", "deploy","rest", "automaneuver", "rune",  "autoHaste" ,"autoRoll","autoMagic", "provoke",  "swaps", "fire", "thunder", "water", "light", "dark", "wind", "earth", "activate", "mnkRecast", "warRecast", "samRecast", "drgRecast", "runRecast", "autoRunes", "runSpells", "automaneuver2", "autoRA", "bottin", "assist", "autoItem", "trusts", "wyvern", "autoClaim", "targetFilter", "debugBot"} --booleans
 	
 	auto = true -- main auto loop bool
 	if auto then
@@ -891,7 +903,7 @@ end
 	trusts = false
 	autoMagic = false
 	rest = true
-	targetFilter = true
+	targetFilter = false
 	debugBot = false
 	
 	-- Approved target list - only these mobs can be targeted when filter is on
@@ -906,10 +918,16 @@ end
 	activate = false
 	mnkRecast = false
 	warRecast = false
-	samRecast=false
+	samRecast = false
+	drgRecast = false
 	runRecast = false
 	autoRunes = false
 	runSpells = false
+	
+	-- Auto-enable job-specific features
+	if player.main_job == "DRG" then
+		wyvern = true
+	end
 	
 	--triggered on mid cast
 	magicburst = false
@@ -941,6 +959,9 @@ end
 -- automaneuver is set to true, it will put maneuvers back up when they wear
 -- if runes it set to true, it will put up any runes that of within the runes set as they wear off
 function buff_change(name, gain)
+	if buffactive['Invisible'] then
+		return
+	end
 	if not gain and automaneuver   and string.find(name,'Maneuver') then --maneuver auto put back up if automaneuver is true
 			add_to_chat(122,name)
 			send_command(name)		
@@ -977,8 +998,8 @@ end
 -- if sets.precast.Waltz is set, it will equip that set when any maneuver is used
 function precast(spell)	
 	if onCooldown(spell) then
-		--add_to_chat(122, spell .. "on cooldown")
-		return false
+		cancel_spell()
+		return
 	end
 	
 	if swaps == false then
@@ -1009,9 +1030,9 @@ function precast(spell)
 		else 
 			equip(sets.precast.WS)
 		end	
-    elseif maneuvers[spell.english]  then
+    elseif string.find(spell.english,'Maneuver') then
 		equip(sets.precast.maneuver)
-	elseif rolls[spell.english]  then
+	elseif string.find(spell.english,'Roll') or string.find(spell.english,'Phantom Roll') then
 		equip(sets.precast.Roll)		
 	elseif waltz[spell.english]  then
 		equip(sets.precast.Waltz)
@@ -1252,23 +1273,39 @@ function self_command(command)
 		else
 			equip_Sets(modeSets[equipSets[command]], 1)
 		end
+	-- Special handling for bottin command
+	elseif command == "bottin" then
+		bottin = booleanChange(bottin)
+		if bottin == true then
+			trusts = true
+			autoClaim = true
+			autoWS = true
+			-- Enable job-specific recasts
+			if player.main_job == "WAR" or player.sub_job == "WAR" then
+				warRecast = true
+			end
+			if player.main_job == "DRG" then
+				drgRecast = true
+			end
+			if player.main_job == "SAM" or player.sub_job == "SAM" then
+				samRecast = true
+			end
+			if player.main_job == "MNK" then
+				mnkRecast = true
+			end
+			if player.main_job == "RUN" then
+				runRecast = true
+			end
+			add_to_chat(122, "bottin on")
+		else 
+			add_to_chat(122, "bottin off")
+		end
 ---- bool toggle----	
 	elseif booleans:contains(command) then		--turns booleans off or on, booleans must be in the commands section
 		_G[command] = booleanChange(_G[command])
 		if _G[command] == true then
 			add_to_chat(122, command .. " on")
 		else 
-			add_to_chat(122, command .. " off")
-		end
-	elseif command == "cap" then
-		if cap == false then
-			equip({back = "Aptitude Mantle"})
-			cap = true 
-			disable("back")
-			add_to_chat(122, command .. " on")
-		else
-			cap = false
-			enable("back")
 			add_to_chat(122, command .. " off")
 		end
 	elseif command == "auto" then
@@ -1282,6 +1319,20 @@ function self_command(command)
 		end
 	elseif command == "autoStuff" then
 		autoStuff()	
+	elseif command == "am" then
+		automaneuver = booleanChange(automaneuver)
+		if automaneuver == true then
+			add_to_chat(122, "automaneuver on")
+		else 
+			add_to_chat(122, "automaneuver off")
+		end
+	elseif command == "am2" then
+		automaneuver2 = booleanChange(automaneuver2)
+		if automaneuver2 == true then
+			add_to_chat(122, "automaneuver2 on")
+		else 
+			add_to_chat(122, "automaneuver2 off")
+		end
 	elseif command == "autoWS" then
 		if autoWS == false then 
 			autoWS = true
@@ -1295,6 +1346,7 @@ function self_command(command)
 	elseif command == "petWS" then
 		if petWS == false then 
 			petWS = true
+			add_to_chat(122, command .. " on123")
 			petWsId = windower.raw_register_event('incoming chunk', update_pet_tp)
 			add_to_chat(122, command .. " on")			
 		else 

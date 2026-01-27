@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Karambit",
+    range="Animator P",
+    ammo="Automat. Oil +3",
+    head="Mpaca's Cap",
+    body="Mpaca's Doublet",
+    hands="Mpaca's Gloves",
+    legs="Mpaca's Hose",
+    feet="Mpaca's Boots",
+    neck="Shulmanu Collar",
+    waist="Moonbow Belt +1",
+    left_ear="Schere Earring",
+    right_ear="Brutal Earring",
+    left_ring="Niqmaddu Ring",
+    right_ring="Epona's Ring",
+    back={ name="Visucius's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','"Dbl.Atk."+10',}},
+}

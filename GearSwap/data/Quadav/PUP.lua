@@ -48,26 +48,27 @@ function get_sets()
 
 
   
-	sets.base = { head= hercHeadTP,
-    body="Hiza. Haramaki +1",
+	sets.base = { head="Mpaca's Cap",
+    body="Mpaca's Doublet",
     hands=hercHandsTP,
-    legs="Tali'ah Sera. +1",
-    feet=hercFeetTP,
+    legs="Mpaca's Hose",
+    feet="Mpaca's Boots",
     neck="Ej Necklace",
     waist="Hurch'lan Sash",
     left_ear="Bladeborn Earring",
     right_ear="Steelflash Earring",
     ring1 =	"Niqmaddu Ring",
     ring2="Epona's Ring",
-      back=VisuciusPet,}
+    back=VisuciusPet
+}
 	--------------------------------------------------WS-----------------------------------------------------------------------
-	--sets.base.WS = set_combine(sets.base,{ head="Hizamaru Somen +1", hands="Ryuo Tekko",  legs="Hiza. Hizayoroi +1", body = "Hizamaru Haramaki"})	
-	sets.WS = set_combine(sets.base,{ head="Hizamaru Somen +1",   legs="Hiza. Hizayoroi +2",  ring1 =	"Niqmaddu Ring", ear1 ="Moonshade Earring",  feet="Hiza. Sune-Ate +1", back =VisuciusWS})
+
+	sets.WS = set_combine(sets.base,{  head="Mpaca's Cap", ring1 =	"Niqmaddu Ring", ear1 ="Moonshade Earring", back =VisuciusWS})
 	sets.WS.Default = set_combine(sets.WS,{ring1 = "Spiral Ring"})
 	sets.WS.Acc = set_combine(sets.WS,{ neck="Shifting Necklace +1"})	
     sets.precast.WS = sets.WS -- don't change
 	
-	sets.WS['Shijin Spiral'] = set_combine(sets.WS,{body="Tali'ah Manteel +2",  Neck="Light Gorget", head = "Tali'ah Turban +1", back=VisuciusTP, feet="Malignance Boots"})
+	sets.WS['Shijin Spiral'] = set_combine(sets.WS,{ Neck="Light Gorget", back=VisuciusTP, feet="Malignance Boots"})
 	sets.WS['Shijin Spiral'].Acc = sets.WS['Shijin Spiral']
 		
 	
@@ -109,7 +110,7 @@ function get_sets()
 
 	
 	----------------------------------------------------Idle------------------------------------------------------------------
-	sets.Idle = set_combine(sets.DT,{feet="Hermes' Sandals", body ="Hiza. Haramaki +1"})
+	sets.Idle = set_combine(sets.DT,{feet="Hermes' Sandals"})
 	sets.Idle.Current = sets.Idle
 	sets.Idle.DT = set_combine(sets.DT,{})
 	sets.Idle.Default = sets.Idle 
@@ -122,14 +123,26 @@ function get_sets()
 	sets.midcast.Pet.Cure = { }
 	sets.midcast.Pet['Elemental Magic'] = {}
 	sets.Pet= {}
-	sets.Pet.base = set_combine(sets.base, {  feet = "Tali'ah Crackows +1",  back=VisuciusPet, head = "Tali'ah Turban +1"})
+	sets.Pet.base = set_combine(sets.base, {  back=VisuciusPet})
 	sets.Pet.Default = set_combine(sets.Pet.base, {})
 	
 	sets.Pet.WS = set_combine( sets.Pet.base,{ hands="Cirque Guanti +2",  feet= "Naga Kyahan"} )
 	sets.Pet.WS['Valoredge Frame'] = set_combine( sets.Pet.WS,{legs = "Taeon Tights", ear1="Burana Earring", ring2="Overbearing Ring"} )
-	sets.Pet.WS['Sharpshot Frame'] = set_combine(sets.Pet.WS,{head = "Karagoz Capello +1", back="Dispersal Mantle",  ear2="Burana Earring", waist="Isa Belt",  legs = "Tali'ah Sera. +1"})
+	sets.Pet.WS['Sharpshot Frame'] = set_combine(sets.Pet.WS,{head = "Karagoz Capello +1", back="Dispersal Mantle",  ear2="Burana Earring", waist="Isa Belt"})
 	
-	sets.Pet.Tank = set_combine(sets.Pet.base,{body = "Pitre Tobe +3",head = "Rao Kabuto", ear1="Handler's Earring +1", ear2="Handler's Earring",ring2="Varar Ring +1", feet = "Rao Sune-Ate", legs = "Tali'ah Sera. +1", hands = "Rao Kote", waist ="Isa Belt"})  	
+	sets.Pet.Tank = set_combine(sets.Pet.base,{
+		head="Mpaca's Cap",
+		body="Mpaca's Doublet",
+		hands="Mpaca's Gloves",
+		legs="Tali'ah Sera. +2",
+		feet="Mpaca's Boots",
+		neck="Ej Necklace",
+		waist="Hurch'lan Sash",
+		left_ear="Bladeborn Earring",
+		right_ear="Steelflash Earring",
+		left_ring="Niqmaddu Ring",
+		right_ring="Epona's Ring"
+	})  	
  	
 	sets.Pet.Custom = sets.Pet.base
 	

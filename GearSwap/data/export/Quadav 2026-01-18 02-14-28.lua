@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Ohtas",
+    range="Animator P",
+    ammo="Automat. Oil +3",
+    head="Mpaca's Cap",
+    body="Mpaca's Doublet",
+    hands="Mpaca's Gloves",
+    legs="Tali'ah Sera. +2",
+    feet="Mpaca's Boots",
+    neck="Ej Necklace",
+    waist="Hurch'lan Sash",
+    left_ear="Bladeborn Earring",
+    right_ear="Steelflash Earring",
+    left_ring="Niqmaddu Ring",
+    right_ring="Epona's Ring",
+    back={ name="Visucius's Mantle", augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20','Pet: Haste+10',}},
+}

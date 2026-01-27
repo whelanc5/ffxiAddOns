@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Karambit",
+    range="Animator P",
+    ammo="Automat. Oil +3",
+    head="Heyoka Cap",
+    body="Mpaca's Doublet",
+    hands="Mpaca's Gloves",
+    legs="Heyoka Subligar",
+    feet="Mpaca's Boots",
+    neck="Shulmanu Collar",
+    waist="Moonbow Belt +1",
+    left_ear="Schere Earring",
+    right_ear="Brutal Earring",
+    left_ring="Niqmaddu Ring",
+    right_ring="Thurandaut Ring",
+    back={ name="Visucius's Mantle", augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20','Accuracy+20 Attack+20','Pet: Haste+10','Pet: Magic dmg. taken-10%',}},
+}

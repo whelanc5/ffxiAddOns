@@ -1,0 +1,16 @@
+sets.exported = {
+    main="Karambit",
+    ammo="Honed Tathlum",
+    head="Mpaca's Cap",
+    body="Mpaca's Doublet",
+    hands="Mpaca's Gloves",
+    legs="Mpaca's Hose",
+    feet="Mpaca's Boots",
+    neck="Loricate Torque",
+    waist="Moonbow Belt +1",
+    left_ear="Schere Earring",
+    right_ear="Sherida Earring",
+    left_ring="Niqmaddu Ring",
+    right_ring="Defending Ring",
+    back={ name="Segomo's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','"Dbl.Atk."+4',}},
+}

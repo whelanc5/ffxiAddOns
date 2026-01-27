@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Ohtas",
+    range="Animator P",
+    ammo="Automat. Oil +3",
+    head="Kara. Cappello +1",
+    body="Pitre Tobe +3",
+    hands="Mpaca's Gloves",
+    legs="Kara. Pantaloni +1",
+    feet={ name="Naga Kyahan", augments={'Pet: HP+70','Pet: Accuracy+19','Pet: Attack+19',}},
+    neck="Shulmanu Collar",
+    waist="Isa Belt",
+    left_ear="Handler's Earring +1",
+    right_ear="Burana Earring",
+    left_ring="Thurandaut Ring",
+    right_ring="Varar Ring +1",
+    back={ name="Dispersal Mantle", augments={'STR+5','DEX+1','Pet: TP Bonus+440',}},
+}

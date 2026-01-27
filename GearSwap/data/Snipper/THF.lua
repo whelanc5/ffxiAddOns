@@ -10,11 +10,15 @@ function get_sets()
 
 	
 	include('cdhelper.lua')
+	
+	currWS = "Evisceration"
+	currTP = 1300
+	
 -------------------------------------------modes---------------------------------------------------------------------------------
 -- These are the sets that will cycle Modes, just make sure the set matches the name here ex: sets.TP.Name will equip if "Name" is in this list
 -- remove modes by deleting the string, make sure not to leave an extra comma
 -- All modes should have a "Default" entry
-	modeSets["tpMode"].setModes = { "Acc", "TH",  "Default", "Custom"} 
+	modeSets["tpMode"].setModes = {"Default", "Acc", "TH",   "Custom"} 
 	modeSets["dtMode"].setModes  = {"Default", "Magic", "Full", "Custom"} --sets.DT.Mode
 	modeSets["wsMode"].setModes = {"Default", "Acc"}  --sets.WS.Mode
 	modeSets["elementalMode"].setModes = {"Default", "DT", "TH", "Custom"}
@@ -26,19 +30,19 @@ function get_sets()
 	----------------------------------------------------------------------Base sets---------------------------------------------------------------------------------
 	-- i use this to use sets_combine to make other sets.
 	sets.base = {
-    head={ name="Herculean Helm"},
-    body="Malignance Tabard",
-    hands="Meg. Gloves +2",
-    legs={ name="Herculean Trousers", augments={'Attack+22','"Triple Atk."+3','DEX+10','Accuracy+15',}},
-    feet={ name="Herculean Boots", augments={'Accuracy+30','"Triple Atk."+3','INT+3','Attack+13',}},
-    neck="Lissome Necklace",
-    waist="Anguinus Belt",
-    left_ear="Bladeborn Earring",
-    right_ear="Steelflash Earring",
-    left_ring="Rajas Ring",
-    right_ring="Epona's Ring",
-    back={ name="Canny Cape", augments={'DEX+2','AGI+4','"Dual Wield"+2',}},
-}-- Base set. Can use this as a base for other sets
+		head=hercHelmTA,
+		body="Malignance Tabard",
+		hands="Malignance Gloves",
+		legs=hercLegsTA,
+		feet=hercFeetTA,
+		neck="Anu Torque",
+		waist="Hurch'lan Sash",
+		left_ear="Sherida Earring",
+		right_ear="Suppanomimi",
+		left_ring="Rajas Ring",
+		right_ring="Epona's Ring",
+		back="Aptitude Mantle"
+	}-- Base set. Can use this as a base for other sets
 
 
 	----------------------------------------------------------------Precast------------------------------------------------------------------------------------------
@@ -80,26 +84,12 @@ function get_sets()
 	sets.aftercast.TP = sets.TP -- don't change this			
     sets.TP.Acc = set_combine(sets.TP,{neck="Shifting Necklace +1" ,waist="Anguinus Belt"})	 
     sets.TP.Haste = set_combine(sets.TP,{waist="Windbuffet Belt"})	
-	sets.TP.TH = {
-
-    head="Meghanada Visor +1",
-    body="Malignance Tabard",
-    hands={ name="Plun. Armlets +1", augments={'Enhances "Perfect Dodge" effect',}},
-    legs="Meg. Chausses +2",
-    feet="Skulk. Poulaines",
-    neck="Shifting Neck. +1",
-    waist="Hurch'lan Sash",
-    left_ear="Steelflash Earring",
-    right_ear="Sherida Earring",
-    left_ring="Varar Ring +1",
-    right_ring="Rajas Ring",
-    back="Moonbeam Cape",
-}	
+	sets.TP.TH = set_combine(sets.base,{legs="Volte Hose"})}	
 	sets.TP.DT= set_combine(sets.TP,{neck="Twilight Torque", ring1="Dark Ring", ring2="Dark Ring" })
 	sets.TP.Custom = set_combine(sets.TP,{})	
 	
 	----------------------------------------------------------------DT-----------------------------------------------------------------------------------------------
-	sets.DT = set_combine(sets.base,{head="Meghanada Visor +1",  body="Meg. Cuirie +1",  feet="Meg. Jam. +1", hands="Meg. Gloves +1", legs="Meg. Chausses +1", })
+	sets.DT = set_combine(sets.base,{})
     sets.DT.Default = sets.DT -- don't change this
 	sets.DT.Custom = sets.DT -- don't change this
 	sets.DT.Magic  = set_combine(sets.DT,{})
@@ -124,12 +114,13 @@ function get_sets()
 
 	----------------------------------------------------------------WS-----------------------------------------------------------------------------------------------
 	sets.precast.WS = {} -- -- don't change this 
-	sets.WS = set_combine(sets.base,{})--base set for weaponskill that isn't named
+	sets.WS = set_combine(sets.base,{hands = "Meg. Gloves +2"})--base set for weaponskill that isn't named
 	sets.WS.Default = sets.WS -- don't change this
 
 	sets.WS.Acc = set_combine(sets.WS,{})
 	
-	
+	sets.WS['Evisceration'] = set_combine(sets.WS,{waist="Soil Belt"})
+	sets.WS['Evisceration'].Acc = sets.WS['Evisceration']
   
 	----sets.WS['Shijin Spiral'] = {ring1 = "Rajas Ring", Neck="Light Gorget" }
 
