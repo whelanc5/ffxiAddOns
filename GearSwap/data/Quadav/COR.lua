@@ -147,7 +147,7 @@ function get_sets()
 	sets.precast.Ranged  = set_combine(sets.Ranged,{ammo = "Eminent Bullet",legs = "Nahtirah Trousers",feet="Meg. Jam. +2"})
 	----------------------------------------------------macro book--------------------------------------------------
 	--set the book and set to your jobs macro set
-	send_command('input /macro book 1;wait .1;input /macro set 9')
+	send_command('input /macro book 2;wait .1;input /macro set 9')
 end
 
 

@@ -18,7 +18,7 @@ function get_sets()
 -- These are the sets that will cycle Modes, just make sure the set matches the name here ex: sets.TP.Name will equip if "Name" is in this list
 -- remove modes by deleting the string, make sure not to leave an extra comma
 -- All modes should have a "Default" entry
-	modeSets["tpMode"].setModes = {"Default", "Acc", "TH",   "Custom"} 
+	modeSets["tpMode"].setModes = {"Default", "TH",   "Custom"} 
 	modeSets["dtMode"].setModes  = {"Default", "Magic", "Full", "Custom"} --sets.DT.Mode
 	modeSets["wsMode"].setModes = {"Default", "Acc"}  --sets.WS.Mode
 	modeSets["elementalMode"].setModes = {"Default", "DT", "TH", "Custom"}
@@ -81,10 +81,8 @@ function get_sets()
 	----------------------------------------------------------------TP-----------------------------------------------------------------------------------------------
 	sets.TP = set_combine(sets.base,{} ) 
 	sets.TP.Current = sets.TP -- don't change this
-	sets.aftercast.TP = sets.TP -- don't change this			
-    sets.TP.Acc = set_combine(sets.TP,{neck="Shifting Necklace +1" ,waist="Anguinus Belt"})	 
-    sets.TP.Haste = set_combine(sets.TP,{waist="Windbuffet Belt"})	
-	sets.TP.TH = set_combine(sets.base,{legs="Volte Hose"})}	
+	sets.aftercast.TP = sets.TP -- don't change this			 	
+	sets.TP.TH = set_combine(sets.base,{legs="Volte Hose", hands="Plun. Armlets +1"})	
 	sets.TP.DT= set_combine(sets.TP,{neck="Twilight Torque", ring1="Dark Ring", ring2="Dark Ring" })
 	sets.TP.Custom = set_combine(sets.TP,{})	
 	

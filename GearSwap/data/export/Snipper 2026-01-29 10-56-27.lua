@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Kaja Knife",
+    sub="Atoyac",
+    ammo="Honed Tathlum",
+    head={ name="Herculean Helm", augments={'Accuracy+22','"Triple Atk."+3','Attack+7',}},
+    body="Malignance Tabard",
+    hands="Plun. Armlets +1",
+    legs="Volte Hose",
+    feet="Trotter Boots",
+    neck="Anu Torque",
+    waist="Hurch'lan Sash",
+    left_ear="Sherida Earring",
+    right_ear="Suppanomimi",
+    left_ring="Rajas Ring",
+    right_ring="Warp Ring",
+    back="Moonbeam Cape",
+}

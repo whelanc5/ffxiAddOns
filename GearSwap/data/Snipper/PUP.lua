@@ -65,7 +65,7 @@ function get_sets()
 	sets.WS['Stringing Pummel'] = set_combine(sets.WS, { Neck="Soil Gorget"})
 	sets.WS['Stringing Pummel'].Acc = sets.WS['Stringing Pummel']
 	
-	sets.WS['Howling Fist'] = set_combine(sets.WS,{Neck="Light Gorget", body="Foire Tobe +3"})
+	sets.WS['Howling Fist'] = set_combine(sets.WS,{Neck="Light Gorget", body="Foire Tobe +3", hands = "Pitre Dastanas +3"})
 	sets.WS['Howling Fist'].Acc = sets.WS['Howling Fist']
 
 		------------------------------------------DT-----------------------------------------------------------------------------------------------
@@ -124,15 +124,22 @@ function get_sets()
 	
 	sets.midcast.Pet = {}	
 	sets.midcast.Pet.Cure = { }
-	sets.midcast.Pet['Elemental Magic'] = {}
+	sets.midcast.Pet['Elemental Magic'] = { 
+		head="Mpaca's Cap",
+    	body="Mpaca's Doublet",
+    	hands="Mpaca's Gloves",
+    	legs="Pitre Churidars +3",
+    	feet="Pitre Babouches +2",
+    	left_ear="Burana Earring"
+	}
 	sets.Pet= {}
 	sets.Pet.base = set_combine(sets.base, {head="Taeon Chapeau", body="Pitre Tobe +3",hands ="Taeon Gloves", legs = "Karagoz Pantaloni +1", ring1="Thurandaut Ring",ring2="Varar Ring +1", waist ="Klouskap Sash", ear1="Handler's Earring +1",  ear2="Domes. Earring",  feet = "Taeon Boots", legs = "Taeon Tights", back=VisuciusPet})
 	sets.Pet.Default = set_combine(sets.Pet.base, {})
 	
-	sets.Pet.WS = set_combine( sets.Pet.base,{ hands="Mpaca's Gloves",  feet= "Naga Kyahan"} )
-	sets.Pet.WS['Valoredge Frame'] = set_combine( sets.Pet.WS,{ head ='Taeon Chapeau', feet = "Taeon Boots", legs = "Taeon Tights", hands = "Taeon Gloves", ear1="Burana Earring", ring2="Overbearing Ring"} )
-	sets.Pet.WS['Sharpshot Frame'] = set_combine(sets.Pet.WS,{head = "Kara. Cappello +1", back="Dispersal Mantle",  ear2="Burana Earring", waist="Isa Belt",  legs = "Karagoz Pantaloni +1"})
-	
+	sets.Pet.WS = set_combine( sets.Pet.base,{ hands="Mpaca's Gloves",  feet= "Mpaca's Boots"} )
+	sets.Pet.WS['Valoredge Frame'] = set_combine( sets.Pet.WS,{ head ='Taeon Chapeau', feet = "Taeon Boots", legs = "Taeon Tights", hands = "Taeon Gloves", ear1="Burana Earring", ring2="Overbearing Ring"})
+	sets.Pet.WS['Sharpshot Frame'] = set_combine(sets.Pet.WS,{head = "Kara. Cappello +1", back="Dispersal Mantle",  ear2="Burana Earring",  legs = "Karagoz Pantaloni +1"})
+
 	sets.Pet.Tank = set_combine(sets.Pet.base,{body = "Pitre Tobe +3",head = "Rao Kabuto", ear1="Handler's Earring +1", ear2="Handler's Earring",ring2="Varar Ring +1", feet = "Rao Sune-Ate", legs = "Tali'ah Sera. +2", hands = "Rao Kote", waist ="Isa Belt"})  	
  	
 	sets.Pet.Custom = sets.Pet.base
