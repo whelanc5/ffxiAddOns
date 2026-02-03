@@ -80,98 +80,99 @@ function checkStuff()
 end
 
 autoStuff = function ()
-	if auto then
-		-- Handle petWS event registration
-		if petWS and petWsId == nil then
-			petWsId = windower.raw_register_event('incoming chunk', update_pet_tp)
-		elseif not petWS and petWsId ~= nil then
-			windower.unregister_event(petWsId)
-			petWsId = nil
+	if not auto then
+		return
+	end
+	coroutine.schedule(autoStuff, 2)
+
+	-- Handle petWS event registration
+	if petWS and petWsId == nil then
+		petWsId = windower.raw_register_event('incoming chunk', update_pet_tp)
+	elseif not petWS and petWsId ~= nil then
+		windower.unregister_event(petWsId)
+		petWsId = nil
+	end
+	
+	-- Handle bottin auto-enable of related features
+	if bottin and not bottinWasOn then
+		trusts = true
+		autoClaim = true
+		autoWS = true
+		-- Enable job-specific recasts
+		if player.main_job == "WAR" or player.sub_job == "WAR" then
+			warRecast = true
 		end
-		
-		-- Handle bottin auto-enable of related features
-		if bottin and not bottinWasOn then
-			trusts = true
-			autoClaim = true
-			autoWS = true
-			-- Enable job-specific recasts
-			if player.main_job == "WAR" or player.sub_job == "WAR" then
-				warRecast = true
-			end
-			if player.main_job == "DRG" then
-				drgRecast = true
-			end
-			if player.main_job == "SAM" or player.sub_job == "SAM" then
-				samRecast = true
-			end
-			if player.main_job == "MNK" then
-				mnkRecast = true
-			end
-			if player.main_job == "RUN" then
-				runRecast = true
-			end
-			bottinWasOn = true
-		elseif not bottin and bottinWasOn then
-			bottinWasOn = false
+		if player.main_job == "DRG" then
+			drgRecast = true
 		end
-		
-		-- Don't auto cast anything if invisible is up
-		if buffactive['Invisible'] then
-			return
-		end
-		if trusts and player.status =='Idle' and player.target.type ~= "MONSTER" and windower.ffxi.get_party().p5 == nil then
-			windower.ffxi.run(false)
-			send_command('wait 1 ;input //tru ' .. trustSet)
-			return
-		end
-		if bottin then
-			bot()
-		end
-		if assist then
-			assistBot()
-		end
-		if player.main_job == "PUP" then 
-			pupStuff()
-		end
-		if player.sub_job == "COR" or player.main_job == "COR" then 
-			corStuff()
+		if player.main_job == "SAM" or player.sub_job == "SAM" then
+			samRecast = true
 		end
 		if player.main_job == "MNK" then
-			mnkStuff()
+			mnkRecast = true
 		end
-		if player.sub_job == "WAR" or player.main_job == "WAR" then 
-			warStuff()
+		if player.main_job == "RUN" then
+			runRecast = true
 		end
-		if player.sub_job == "SAM" or player.main_job == "SAM" then 
-			samStuff()
-		end
-		if  player.main_job == "DRG" then 
-			drgStuff()
-		end
-		if player.main_job == "RUN" then 
-			runStuff()
-		end
-		if autoRA then
-			autoRange()
-		end
-		if autoItem then
-			autoItemUse()
-		end
-		if autoMagic then
-			if autoMagicCast == nil
-				then include('autoMagic.lua')
-			end
-			autoMagicCast()
-			
-		end
-		if autoWS and player.tp >  currTP and  player.status == "Engaged"  then 
-			send_command('input / '.. currWS ..' <t>')	
-		end	
-		
-		--/
-		coroutine.schedule(autoStuff, 2)
-			
+		bottinWasOn = true
+	elseif not bottin and bottinWasOn then
+		bottinWasOn = false
 	end
+	
+	-- Don't auto cast anything if invisible is up
+	if buffactive['Invisible'] then
+		return
+	end
+	if trusts and player.status =='Idle' and player.target.type ~= "MONSTER" and windower.ffxi.get_party().p5 == nil then
+		windower.ffxi.run(false)
+		send_command('wait 1 ;input //tru ' .. trustSet)
+		return
+	end
+	if bottin then
+		bot()
+	end
+	if assist then
+		assistBot()
+	end
+	if player.main_job == "PUP" then 
+		pupStuff()
+	end
+	if player.sub_job == "COR" or player.main_job == "COR" then 
+		corStuff()
+	end
+	if player.main_job == "MNK" then
+		mnkStuff()
+	end
+	if player.sub_job == "WAR" or player.main_job == "WAR" then 
+		warStuff()
+	end
+	if player.sub_job == "SAM" or player.main_job == "SAM" then 
+		samStuff()
+	end
+	if  player.main_job == "DRG" then 
+		drgStuff()
+	end
+	if player.main_job == "RUN" then 
+		runStuff()
+	end
+	if autoRA then
+		autoRange()
+	end
+	if autoItem then
+		autoItemUse()
+	end
+	if autoMagic then
+		if autoMagicCast == nil
+			then include('autoMagic.lua')
+		end
+		autoMagicCast()
+		
+	end
+	if autoWS and player.tp >  currTP and  player.status == "Engaged"  then 
+		send_command('input / '.. currWS ..' <t>')	
+	end	
+	
+	--/
 	
 	
 end
@@ -316,7 +317,7 @@ function runStuff()
 	end
 end
 
-roll1 = "Corsair's Roll"
+roll1 = "Fighter's Roll"
 roll2 = 'Samurai Roll'
 function corStuff()
 		if autoRoll then
@@ -1100,18 +1101,6 @@ end
 
 
 -----------------------------------------------midcast----------------------------------------------------------------------------------------------
---mid cast sets---------------
--- sets.midcast[spell.english]
--- sets.midcast.Elemental
--- sets.midcast.Elemental.Burst
--- sets.midcast.Ranged
--- sets.midcast.Healing
--- sets.Blue.Magic
--- sets.Blue.Physical
--- sets.Blue.Debuff
--- sets.Blue.Buff
--- sets.Blue.Cure
--- sets.Blue.
 
 function midcast(spell)
 	if swaps == false then
@@ -1159,6 +1148,25 @@ function midcast(spell)
 	end
 end
 
+
+
+---------------------------------------------------------------------Pet midcast-----------------------------------------------------------------
+function pet_midcast(spell)
+	if spell.skill == 'Elemental Magic' then
+		equip(sets.midcast.Pet['Elemental Magic'])
+	end
+end
+---------------------------------------------------------------------Pet aftercast-----------------------------------------------------------------
+--puts current tp/idle set on after a pet cast
+-- if petWS bool is on it turns it off
+function pet_aftercast(spell)   --put tp gear back on after pet
+	if player.status =='Engaged' then
+		
+		equip(sets.aftercast.TP)
+    else
+        equip(sets.aftercast.Idle)
+    end
+  end
 -----------------------------------------------------------status change-------------------------------------------------------------
 
 function status_change(new,old)

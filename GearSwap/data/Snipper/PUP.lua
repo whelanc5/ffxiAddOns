@@ -126,7 +126,7 @@ function get_sets()
 	sets.midcast.Pet.Cure = { }
 	sets.midcast.Pet['Elemental Magic'] = { 
 		head="Mpaca's Cap",
-    	body="Mpaca's Doublet",
+    	body='Magnif. Cyclas',
     	hands="Mpaca's Gloves",
     	legs="Pitre Churidars +3",
     	feet="Pitre Babouches +2",
@@ -137,8 +137,8 @@ function get_sets()
 	sets.Pet.Default = set_combine(sets.Pet.base, {})
 	
 	sets.Pet.WS = set_combine( sets.Pet.base,{ hands="Mpaca's Gloves",  feet= "Mpaca's Boots"} )
-	sets.Pet.WS['Valoredge Frame'] = set_combine( sets.Pet.WS,{ head ='Taeon Chapeau', feet = "Taeon Boots", legs = "Taeon Tights", hands = "Taeon Gloves", ear1="Burana Earring", ring2="Overbearing Ring"})
-	sets.Pet.WS['Sharpshot Frame'] = set_combine(sets.Pet.WS,{head = "Kara. Cappello +1", back="Dispersal Mantle",  ear2="Burana Earring",  legs = "Karagoz Pantaloni +1"})
+	sets.Pet.WS['Valoredge Frame'] = set_combine( sets.Pet.WS,{ head ='Taeon Chapeau', body='Magnif. Cyclas', feet = "Taeon Boots", legs = "Taeon Tights", hands = "Taeon Gloves", ear1="Burana Earring", ring2="Overbearing Ring"})
+	sets.Pet.WS['Sharpshot Frame'] = set_combine(sets.Pet.WS,{head = "Kara. Cappello +1", body='Magnif. Cyclas', back="Dispersal Mantle",  ear2="Burana Earring",  legs = "Karagoz Pantaloni +1"})
 
 	sets.Pet.Tank = set_combine(sets.Pet.base,{body = "Pitre Tobe +3",head = "Rao Kabuto", ear1="Handler's Earring +1", ear2="Handler's Earring",ring2="Varar Ring +1", feet = "Rao Sune-Ate", legs = "Tali'ah Sera. +2", hands = "Rao Kote", waist ="Isa Belt"})  	
  	

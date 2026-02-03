@@ -56,10 +56,10 @@ defaults.text.font = 'Consolas'
 defaults.text.size = 10
 defaults.autosets = T{}
 defaults.autosets.default = T{ }
-defaults.AutoActivate = true
+defaults.AutoActivate = false
 defaults.AutoDeusExAutomata = false
-defaults.maneuvertimers = true
-defaults.burdentracker = true
+defaults.maneuvertimers = false
+defaults.burdentracker = false
 
 settings = config.load(defaults)
 

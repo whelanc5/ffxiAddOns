@@ -42,7 +42,7 @@ function get_sets()
 	
 	sets.base ={
     head="Malignance Chapeau",   
-    body="Mummu Jacket +2",
+    body="Malignance Tabard",
     hands="Malignance Gloves",
     legs="Malignance Tights",
     feet= "Malignance Boots",
@@ -102,7 +102,7 @@ function get_sets()
  	
 	
 	----------------------------------------------------------------DT-----------------------------------------------------------------------------------------------
-	sets.DT = set_combine(sets.base, {head="Malignance Chapeau",  body="Meg. Cuirie +2",   hands="Malignance Gloves", left_ring="Meghanada Ring"})
+	sets.DT = set_combine(sets.base, {head="Malignance Chapeau",  body="Malignance Tabard",   hands="Malignance Gloves", left_ring="Meghanada Ring"})
     sets.DT.Default = sets.DT -- don't change this
 	sets.DT.Custom = sets.DT -- don't change this
 	sets.DT.Magic  = set_combine(sets.DT,{})

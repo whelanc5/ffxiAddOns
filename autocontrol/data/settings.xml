@@ -4,6 +4,22 @@
         <AutoActivate>true</AutoActivate>
         <AutoDeusExAutomata>false</AutoDeusExAutomata>
         <autosets>
+            <blm>
+                <frame>stormwaker frame</frame>
+                <head>spiritreaver head</head>
+                <slot01>tranquilizer iv</slot01>
+                <slot02>ice maker</slot02>
+                <slot03>amplifier ii</slot03>
+                <slot04>amplifier</slot04>
+                <slot05>mana tank iv</slot05>
+                <slot06>economizer</slot06>
+                <slot07>mana channeler</slot07>
+                <slot08>mana channeler ii</slot08>
+                <slot09>optic fiber ii</slot09>
+                <slot10>optic fiber</slot10>
+                <slot11>heatsink</slot11>
+                <slot12>condenser</slot12>
+            </blm>
             <bruiser>
                 <frame>valoredge frame</frame>
                 <head>soulsoother head</head>
@@ -39,6 +55,22 @@
                 <slot11>Mana Channeler</slot11>
                 <slot12>Stealth Screen</slot12>
             </healer>
+            <lilith>
+                <frame>sharpshot frame</frame>
+                <head>valoredge head</head>
+                <slot01>turbo charger ii</slot01>
+                <slot02>truesights</slot02>
+                <slot03>tension spring iv</slot03>
+                <slot04>mana jammer iv</slot04>
+                <slot05>attuner</slot05>
+                <slot06>magniplug</slot06>
+                <slot07>flame holder</slot07>
+                <slot08>auto-repair kit iv</slot08>
+                <slot09>optic fiber ii</slot09>
+                <slot10>optic fiber</slot10>
+                <slot11>magniplug ii</slot11>
+                <slot12>steam jacket</slot12>
+            </lilith>
             <melrng>
                 <frame>Sharpshot Frame</frame>
                 <head>Valoredge Head</head>

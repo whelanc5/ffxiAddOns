@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Dragon Fangs",
+    range="Animator P +1",
+    ammo="Automat. Oil +2",
+    head="Mpaca's Cap",
+    body="Magnif. Cyclas",
+    hands="Malignance Gloves",
+    legs="Mpaca's Hose",
+    feet="Hermes' Sandals",
+    neck="Loricate Torque",
+    waist="Moonbow Belt +1",
+    left_ear="Schere Earring",
+    right_ear="Brutal Earring",
+    left_ring="Niqmaddu Ring",
+    right_ring="Defending Ring",
+    back="Moonbeam Cape",
+}
